@@ -1,4 +1,4 @@
-package: github.com/everymatrix/kube-admin
+package: github.com/arcade/keres
 import:
 - package: k8s.io/client-go
   version: v6.0.0
