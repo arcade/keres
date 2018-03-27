@@ -1,6 +1,8 @@
 package: github.com/arcade/keres
 import:
-- package: k8s.io/client-go
-  version: v6.0.0
-- package: github.com/kataras/iris
-  version: v10.5.0
+  - package: github.com/spf13/cobra
+  version: bc81c21bd0d8be5ba2d6630a505d79d4467566e7
+  - package: k8s.io/client-go
+    version: v6.0.0
+  - package: github.com/kataras/iris
+    version: v10.5.0
