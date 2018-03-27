@@ -1,7 +1,10 @@
 BINARY = keres
-GOARCH = amd64
+PROJ = keres
+ORG_PATH=github.com/arcade
+REPO_PATH=$(ORG_PATH)/$(PROJ)
 
-VERSION?=?
+GOARCH = amd64
+VERSION?=$(shell ./scripts/git-version)
 COMMIT=$(shell git rev-parse HEAD)
 BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 
@@ -9,11 +12,16 @@ BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
 GITHUB_USERNAME=arcade
 CURRENT_DIR=$(shell pwd)
 
+export GOBIN=$(PWD)/bin
+
 # Setup the -ldflags option for go build here, interpolate the variable values
-LDFLAGS = -ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
+LDFLAGS = "-w -X $(REPO_PATH)/version.Version=$(VERSION) -X main.COMMIT=${COMMIT} -X main.BRANCH=${BRANCH}"
 
 # Build the project
-all: clean linux darwin windows
+all: clean bin/keres
+
+bin/keres:
+	@GOARCH=${GOARCH} go install -v -ldflags $(LDFLAGS) $(REPO_PATH)/cmd/keres
 
 linux:
 	GOOS=linux GOARCH=${GOARCH} go build ${LDFLAGS} -o bin/${BINARY}-linux-${GOARCH} cmd/keres/main.go ; \
@@ -25,6 +33,6 @@ windows:
 	GOOS=windows GOARCH=${GOARCH} go build ${LDFLAGS} -o bin/${BINARY}-windows-${GOARCH}.exe cmd/keres/main.go ; \
 
 clean:
-	-rm -f bin/${BINARY}-*
+	@-rm -f bin/${BINARY}-*
 
-.PHONY: linux darwin windows clean
+.PHONY: clean bin/keres
