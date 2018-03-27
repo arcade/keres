@@ -1,0 +1,6 @@
+package: github.com/everymatrix/kube-admin
+import:
+- package: k8s.io/client-go
+  version: v6.0.0
+- package: github.com/kataras/iris
+  version: v10.5.0
